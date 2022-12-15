@@ -33,20 +33,19 @@ document.addEventListener( 'DOMContentLoaded', ()=>{
   const el_deny = el_cookie_banner.querySelector( '#wmwp-cookies-deny' );
 
   //Hide if consent is given
-  if( WMCookiesInst.getCookie( 'wmc09' ) ) {
-    console.log( 'cookie is set' );
-    //el_cookie_banner.style.display = 'hidden';
+  if( !WMCookiesInst.getCookie( 'wmc09' ) ) {
+    el_cookie_banner.style.display = 'flex';
   }
 
   el_consent.addEventListener( 'click', ()=>{
 
     WMCookiesInst.setCookie( 'wmc09', 'true', ( 1000*60*60*24*365 ) );
-    //el_cookie_banner.style.display = 'none';
+    el_cookie_banner.style.display = 'none';
   } );
 
   el_deny.addEventListener( 'click', ()=>{
 
-    WMCookiesInst.getCookie( 'wmc09' );
-    //el_cookie_banner.style.display = 'none';
+    WMCookiesInst.setCookie( 'wmc09', 'false', ( 1000*60*60*24*365 ) );
+    el_cookie_banner.style.display = 'none';
   } );
 } );
