@@ -2,18 +2,13 @@
 
 /**
  * Builds Settings Page and enqueues Scripts and styles for it
- * @since      1.0
- * @author     Jakub Runda <jakub@webmajstr.cz>
- * @copyright  Copyright (c) 2022 Webmajstr
+ * @since      0.9
+ * @author     Webmind <hello@webmind.agency>
+ * @copyright  Copyright (c) 2022 Webmind Agency
  * @license    GPL2+
  */
-class WMWP_Cookies_Backend
+class WMCookies_Backend
 {
-
-  /**
-   * Post type slug to further refference
-   */
-  private string $post_type = '';
 
   /**
    * All admin hooks go here
@@ -21,22 +16,17 @@ class WMWP_Cookies_Backend
    * @access public
    * @return void
    */
-  public function __construct($post_type)
+  public function __construct($version, $text_domain)
   {
 
-    $this->post_type = $post_type;
+    $this->version = $version;
+    $this->text_domain = $text_domain;
 
     //registering settings
     add_action('admin_init', array($this, 'register_settings'));
 
     //generating subpage
     add_action('admin_menu', array($this, 'settings_subpage'));
-
-    // registering sidebar meta fields option selects only for opened_position post type edit
-    // There is a check also inside of the guttenberg block that displays the meta fields options 
-    // but this seems a bit more clean way.
-    add_action('admin_print_scripts-post-new.php', array($this, 'enqueue_metafields_block'), 11);
-    add_action('admin_print_scripts-post.php', array($this, 'enqueue_metafields_block'), 11);
   }
 
 
@@ -51,8 +41,8 @@ class WMWP_Cookies_Backend
   {
     // setings
     register_setting(
-      'ess_career_settings',   // Option Group - ideally  'general', 'discussion', 'media', 'reading', 'writing', 'misc', 'options', and 'privacy'.			
-      'ess_career_options',    // Options Name
+      'wmcookies_settings',   // Option Group - ideally  'general', 'discussion', 'media', 'reading', 'writing', 'misc', 'options', and 'privacy'.			
+      'wmcookies_options',    // Options Name
     );
   }
 
@@ -70,11 +60,11 @@ class WMWP_Cookies_Backend
 
     $page_hook_suffix = add_submenu_page(
       'options-general.php',
-      'Ess Career ' . __('Settings Page', ESS_CAREER_TEXTDOMAIN), // String: Title
-      'ESS Career', // String: Menu Title
+      'WMCookies ' . __('Settings Page', ESS_CAREER_TEXTDOMAIN), // String: Title
+      'WMCookies', // String: Menu Title
       'manage_options', // String: Description capability required for this menu to be displayed to the user.
-      'ess_career_settings', // String: Unique Page slug
-      array($this, 'ess_career_settings_html'), // String/Array: Callback Function
+      'wmcookies_settings', // String: Unique Page slug
+      array($this, 'wmcookies_settings_html'), // String/Array: Callback Function
       81 // order
     );
 
@@ -91,7 +81,7 @@ class WMWP_Cookies_Backend
    * @access public
    * @return void
    */
-  public function ess_career_settings_html()
+  public function wmcookies_settings_html()
   {
     // check user capabilities
     if (!current_user_can('manage_options')) {
@@ -102,7 +92,7 @@ class WMWP_Cookies_Backend
     <div class="wrap">
       <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
     </div>
-    <div id="ess-career-options-wrapper" class="wrap">
+    <div id="wmcookies-options-wrapper" class="wrap">
   <?php
   }
 
@@ -111,7 +101,7 @@ class WMWP_Cookies_Backend
   /**
    * Enqueues Guttenberg friendly Rest Api like React based settings javascript.
    * Enqueues also Backend styles for Settings.
-   * @since 1.0
+   * @since 0.9
    * @access public
    * @return void
    */
@@ -121,9 +111,9 @@ class WMWP_Cookies_Backend
     $deps = [
       'wp-api', 'wp-i18n', 'wp-components', 'wp-element'
     ];
-    wp_enqueue_script('ess_career_guttenberg_options', plugins_url("js/settings-page.js", __DIR__), $deps, ESS_CAREER_VERSION);
+    wp_enqueue_script('wmcookies_guttenberg_options', plugins_url("js/settings-page.js", __DIR__), $deps, ESS_CAREER_VERSION);
 
     // STYLES
-    wp_enqueue_style('ess_career_backend_styles', plugins_url("css/settings-page.css", __DIR__), array(), ESS_CAREER_VERSION);
+    wp_enqueue_style('wmcookies_backend_styles', plugins_url("css/settings-page.css", __DIR__), array(), ESS_CAREER_VERSION);
   }
 }

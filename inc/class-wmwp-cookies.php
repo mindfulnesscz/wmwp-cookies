@@ -66,24 +66,36 @@ class WMWP_Cookies
 
   private function _load_dependencies()
   {
-    require_once plugin_dir_path(__FILE__) . 'class-wmwp-frontend.php';
-    //require_once plugin_dir_path(__FILE__) . 'admin-builder.php';
+    require_once plugin_dir_path(__FILE__) . 'class-wmcookies-frontend.php';
+    require_once plugin_dir_path(__FILE__) . 'class-wmcookies-backend.php';
   }
 
-  private function _admin_init()
-  {
-  }
+
+
 
   /**
-   * _FRONTEND_INIT
+   * Initiates Backend Class.
+   * 
+   * @since    0.9
+   * @access   private
+   */
+  private function _admin_init()
+  {
+    $Backend = new WMCookies_Backend($this->text_domain, $this->version);
+  }
+
+
+
+
+  /**
    * Initiates Frontend Class.
-   *
-   * @since    1.0.0
+   * 
+   * @since    0.9
    * @access   private
    */
   private function _frontend_init()
   {
-    $Frontend = new WMWP_Cookies_Frontend($this->text_domain, $this->version);
+    $Frontend = new WMCookies_Frontend($this->text_domain, $this->version);
   }
 
   /**
@@ -104,5 +116,26 @@ class WMWP_Cookies
       $path = dirname(dirname(plugin_basename(__FILE__))) . '/languages/';
       load_plugin_textdomain($textdomain, false, $path);
     });
+  }
+
+
+
+
+  /**
+   * Registers the rest route to grab filter data via rest api
+   * @since 0.9
+   * @access public
+   * @return void
+   */
+  public function register_rest_route()
+  {
+    register_rest_route('wmwpcookies', '/v2/filter', array(
+      'methods' => 'GET',
+      'callback' => function () {
+        return get_option('wmwpcookies_settings_json');
+      },
+      'permission_callback' => '__return_true' // wordpress stuff !?!
+
+    ));
   }
 }

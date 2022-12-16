@@ -5,14 +5,13 @@
  * @since      0.9
  */
 
-class WMWP_Cookies_Frontend
+class WMCookies_Frontend
 {
 
-  public function __construct($text_domain, $version)
+  public function __construct($version, $text_domain)
   {
 
     $this->version = $version;
-
     $this->text_domain = $text_domain;
 
     $this->wms_frontend_install();
