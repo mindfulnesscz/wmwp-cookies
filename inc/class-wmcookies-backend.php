@@ -60,7 +60,7 @@ class WMCookies_Backend
 
     $page_hook_suffix = add_submenu_page(
       'options-general.php',
-      'WMCookies ' . __('Settings Page', ESS_CAREER_TEXTDOMAIN), // String: Title
+      'WMCookies ' . __('Settings Page', $this->text_domain), // String: Title
       'WMCookies', // String: Menu Title
       'manage_options', // String: Description capability required for this menu to be displayed to the user.
       'wmcookies_settings', // String: Unique Page slug
@@ -111,9 +111,9 @@ class WMCookies_Backend
     $deps = [
       'wp-api', 'wp-i18n', 'wp-components', 'wp-element'
     ];
-    wp_enqueue_script('wmcookies_guttenberg_options', plugins_url("js/settings-page.js", __DIR__), $deps, ESS_CAREER_VERSION);
+    wp_enqueue_script('wmcookies_guttenberg_options', plugins_url("assets/js/settings-page.js", __DIR__), $deps, $this->version);
 
     // STYLES
-    wp_enqueue_style('wmcookies_backend_styles', plugins_url("css/settings-page.css", __DIR__), array(), ESS_CAREER_VERSION);
+    wp_enqueue_style('wmcookies_backend_styles', plugins_url("assets/css/settings-page.css", __DIR__), array(), $this->version);
   }
 }
