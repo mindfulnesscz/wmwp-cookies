@@ -16,6 +16,10 @@ class WMCookies_Backend
    * @access public
    * @return void
    */
+
+  public $version;
+  public $text_domain;
+
   public function __construct($version, $text_domain)
   {
 
