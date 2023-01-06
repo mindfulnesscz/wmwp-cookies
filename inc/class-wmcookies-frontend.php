@@ -7,6 +7,8 @@
 
 class WMCookies_Frontend
 {
+  public $version;
+  public $text_domain;
 
   public function __construct($version, $text_domain)
   {
@@ -15,8 +17,6 @@ class WMCookies_Frontend
     $this->text_domain = $text_domain;
 
     $this->wms_frontend_install();
-
-    $this->form_options = get_option('wms_options');
   }
 
 
@@ -41,9 +41,9 @@ class WMCookies_Frontend
    */
   public function enqueue_scripts_and_styles()
   {
-    wp_enqueue_script('wmwp-cookie-frontend', plugins_url('assets/js/wmwp-cookies-frontend.js', __DIR__), array(), $this->version, false);
+    wp_enqueue_script('wmcookies-fe-script', plugins_url('assets/js/frontend.js', __DIR__), array(), $this->version, false);
 
-    wp_enqueue_style('wmwp-cookie-frontend-style', plugins_url('assets/css/wmwp-cookies-frontend.css', __DIR__), array(), $this->version);
+    wp_enqueue_style('wmcookies-fe-styles', plugins_url('assets/css/frontend.css', __DIR__), array(), $this->version);
   }
 
 

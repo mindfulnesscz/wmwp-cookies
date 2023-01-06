@@ -12,9 +12,12 @@ module.exports = function ( grunt ) {
           loadPath: ['./', 'node_modules']
         },
         files: {
-          './assets/css/wmwp-cookies-frontend.css': [
+          './assets/css/frontend.css': [
             'src/sass/frontend.sass'
           ],
+          './assets/css/admin.css':[
+            'src/sass/admin.sass'
+          ]
         }
       }
     },

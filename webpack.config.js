@@ -14,8 +14,8 @@ module.exports = {
   devtool: isDevelopment ? 'inline-source-map' : 'source-map',
 
   entry: {
-    'wmwp-cookies-frontend': './src/index.ts',
-    'settings-page': './src/backend.tsx'
+    'frontend': './src/index.ts',
+    'admin': './src/admin.tsx'
   },
 
   output: {

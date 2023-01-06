@@ -10,14 +10,13 @@ import { __ } from '@wordpress/i18n';
 import React, { useEffect, useState } from 'react';
 
 // plugin
-import OptionsRow from './options-row';
-import { globalSettings, Settings } from '../components/optionsTypes';
-
-
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const wp: any;
+
+declare type Settings = {
+  setting1: boolean
+}
 
 
 /**
@@ -30,12 +29,13 @@ const WMCookiesSettingsPage: React.FC = () => {
   const [isAPILoaded, setIsApiLoaded] = useState( false );
   const [isAPILoading, setIsApiLoading] = useState( false );
 
-  const [itemsList, setItemsList] = useState<Settings | null>( null );
+  const [settingsList, setSettingsList] = useState<Settings | null>( null );
 
 
 
   /**
    * Grabs settings to further refference
+   * Name of the settings is 
    * @return void
    */
   useEffect( () => {
@@ -45,11 +45,14 @@ const WMCookiesSettingsPage: React.FC = () => {
       const settings = new wp.api.models.Settings();
 
       if ( false === isAPILoaded ) {
-        settings.fetch().then( ( response: { ess_career_settings_json: string; } ) => {
+        settings.fetch().then( ( response: { wmcookies_settings_json: string; } ) => {
 
-          const CareerSettings = JSON.parse( response.ess_career_settings_json );
+          console.log( 'response' );
+          console.log( response );
 
-          setItemsList( CareerSettings );
+          const Settings = JSON.parse( response.wmcookies_settings_json );
+
+          setSettingsList( Settings );
 
           setIsApiLoaded( true );
         } );
@@ -68,7 +71,7 @@ const WMCookiesSettingsPage: React.FC = () => {
     setIsApiLoading( true );
 
     const model = new wp.api.models.Settings( {
-      ['ess_career_settings_json']: JSON.stringify( itemsList ),
+      ['wmcookies_settings_json']: JSON.stringify( settingsList ),
     } );
 
     model.save().then( () => {
@@ -84,30 +87,13 @@ const WMCookiesSettingsPage: React.FC = () => {
    * @param data Array data to be passed to itemsList
    * @return void
    */
-  const updateItemsList = ( key_name: string, data: any ): void => {
+  const updateSetting = ( key_name: string, data: any ): void => {
 
-    const newList = { ...itemsList };
+    const newList = { ...settingsList };
     newList[key_name as keyof Settings] = data;
 
-    setItemsList( newList as Settings );
+    setSettingsList( newList as Settings );
   };
-
-  /**
-   * Handles global settings updates
-   * @param setting 
-   * @param value 
-   * @return void
-   */
-  const updateGlobalSettings = ( setting: string, value: boolean ): void => {
-    const newGlobalSettings = { ...itemsList };
-
-    if( newGlobalSettings.globalSettings )
-      newGlobalSettings.globalSettings[setting as keyof globalSettings] = value;
-
-    setItemsList( newGlobalSettings as Settings );
-
-  };
-
 
 
   /**
@@ -127,63 +113,30 @@ const WMCookiesSettingsPage: React.FC = () => {
       return (
         <Fragment>
 
-          <div className="ess-career-main max-w-4xl mx-auto">
-            <h1 className='text-center'>{__( 'ESS Career Options' )}</h1>
+          <div id="wmwp-settings-main">
+            <h1 className='text-center'>{__( 'Webmind Cookies Plugin Settings' )}</h1>
             <div >
 
-              {/* -------------- GLOBAL SETTINGS  -------------- */}
-
-              <div className="border border-gray-400 bg-white rounded-md m-4 px-6">
+              <div className="wmwp-settings-group">
                 <PanelBody title={__( 'Global settings' )} initialOpen={true}>
                   <PanelRow className="pb-8">
                     <ToggleControl
-                      label="Allow filter"
-                      help={'Check to allow filter career posts feature on frontend'}
-                      checked={itemsList?.globalSettings.showFilter && itemsList.globalSettings.showFilter}
+                      label="Test toggle"
+                      help={'test toggle'}
+                      checked={settingsList ? settingsList.setting1 : false}
                       onChange={() => {
-                        if( itemsList )
-                          updateGlobalSettings( 'showFilter', !itemsList.globalSettings.showFilter );
-                        console.log( itemsList );
+                        updateSetting( 'setting1', settingsList && !settingsList.setting1 );
+                        console.log( settingsList );
                       }}
                     />
                   </PanelRow>
                 </PanelBody>
               </div>
 
-              {/* -------------- LOCATION POST META OPTION ROW  -------------- */}
-
-              <OptionsRow
-                title='Available locations'
-                optionSlug='locations'
-                listFn={updateItemsList}
-                items={itemsList ? itemsList['locations'] : [{slug: 'all', name: 'all'}]}
-                isApiLoading={isAPILoading}
-              />
-
-              {/* -------------- DEPARTMENT POST META OPTION ROW  -------------- */}
-
-              <OptionsRow
-                title='Available departments'
-                optionSlug='departments'
-                listFn={updateItemsList}
-                items={itemsList ? itemsList['departments'] : [{slug: 'all', name: 'all'}]}
-                isApiLoading={isAPILoading}
-              />
-
-              {/* -------------- CONTRACT TYPE POST META OPTION ROW  -------------- */}
-
-              <OptionsRow
-                title='Available types of contract'
-                optionSlug='types'
-                listFn={updateItemsList}
-                items={itemsList ? itemsList['types'] : [{slug: 'all', name: 'all'}]}
-                isApiLoading={isAPILoading}
-              />
-
               {/* -------------- SAVE BUTTON  -------------- */}
               <PanelRow className={'my-12'}>
                 <Button
-                  className={' block bg-itsblue text-white w-24 h-24 rounded-full m-auto shadow-md hover:bg-itsblue-dark transition-colors'}
+                  className={'wmwp-settings-submit'}
                   disabled={isAPILoading}
                   onClick={saveOptions}
                 >

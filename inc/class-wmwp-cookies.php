@@ -7,6 +7,9 @@
 
 class WMWP_Cookies
 {
+  public $text_domain;
+
+  public $version;
 
   public function __construct($text_domain, $version)
   {
@@ -21,7 +24,9 @@ class WMWP_Cookies
 
     $this->_set_locale();
 
-    //add_action('init', array($this, 'wm_subscribe_admin_styles'));
+
+    add_action('init', array($this, 'register_settings'));
+    add_action('rest_api_init', array($this, 'register_settings'));
 
     if (is_admin()) {
 
@@ -72,7 +77,6 @@ class WMWP_Cookies
 
 
 
-
   /**
    * Initiates Backend Class.
    * 
@@ -83,7 +87,6 @@ class WMWP_Cookies
   {
     $Backend = new WMCookies_Backend($this->text_domain, $this->version);
   }
-
 
 
 
@@ -137,5 +140,33 @@ class WMWP_Cookies
       'permission_callback' => '__return_true' // wordpress stuff !?!
 
     ));
+  }
+
+
+  /**
+   * Registers one setting and fills it with default stringified json object
+   * @since  0.9
+   * @access private
+   * @return void
+   */
+  public function register_settings()
+  {
+    // GUTENBERG FRIENDLY APPROACH
+
+    $default_values = array(
+      "setting1" => true
+    );
+
+    $default_values_enc = json_encode($default_values);
+
+    register_setting(
+      'wmcookies_settings',
+      'wmcookies_settings_json',
+      array(
+        'type'         => 'string',
+        'show_in_rest' => true,
+        'default'    => $default_values_enc
+      )
+    );
   }
 }

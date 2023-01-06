@@ -26,34 +26,13 @@ class WMCookies_Backend
     $this->version = $version;
     $this->text_domain = $text_domain;
 
-    //registering settings
-    add_action('admin_init', array($this, 'register_settings'));
-
     //generating subpage
     add_action('admin_menu', array($this, 'settings_subpage'));
   }
 
 
-
   /**
-   * Register the settings 
-   * @since 1.0
-   * @access public
-   * @return void
-   */
-  public function register_settings()
-  {
-    // setings
-    register_setting(
-      'wmcookies_settings',   // Option Group - ideally  'general', 'discussion', 'media', 'reading', 'writing', 'misc', 'options', and 'privacy'.			
-      'wmcookies_options',    // Options Name
-    );
-  }
-
-
-
-  /**
-   * Registers ess_career settings and creates a subpage to edit them.
+   * Registers subpage to edit settings.
    * @since 1.0
    * @access public
    * @return void
@@ -115,9 +94,9 @@ class WMCookies_Backend
     $deps = [
       'wp-api', 'wp-i18n', 'wp-components', 'wp-element'
     ];
-    wp_enqueue_script('wmcookies_guttenberg_options', plugins_url("assets/js/settings-page.js", __DIR__), $deps, $this->version);
+    wp_enqueue_script('wmcookies_admin_js', plugins_url("assets/js/admin.js", __DIR__), $deps, $this->version);
 
     // STYLES
-    wp_enqueue_style('wmcookies_backend_styles', plugins_url("assets/css/settings-page.css", __DIR__), array(), $this->version);
+    wp_enqueue_style('wmcookies_admin_css', plugins_url("assets/css/admin.css", __DIR__), array(), $this->version);
   }
 }

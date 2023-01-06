@@ -37071,14 +37071,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/placeholder/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/spinner/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/panel/body.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/panel/row.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/placeholder/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/spinner/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/panel/body.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/panel/row.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/toggle-control/index.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-/* harmony import */ var _options_row__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./options-row */ "./src/components/options-row.tsx");
 /**
  * Guttenberg & React based settings page for ESS Career Plugin
  */
@@ -37087,8 +37086,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// plugin
-
 /**
  *
  * @returns
@@ -37096,9 +37093,10 @@ __webpack_require__.r(__webpack_exports__);
 const WMCookiesSettingsPage = () => {
     const [isAPILoaded, setIsApiLoaded] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
     const [isAPILoading, setIsApiLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-    const [itemsList, setItemsList] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+    const [settingsList, setSettingsList] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
     /**
      * Grabs settings to further refference
+     * Name of the settings is
      * @return void
      */
     (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
@@ -37106,8 +37104,10 @@ const WMCookiesSettingsPage = () => {
             const settings = new wp.api.models.Settings();
             if (false === isAPILoaded) {
                 settings.fetch().then((response) => {
-                    const CareerSettings = JSON.parse(response.ess_career_settings_json);
-                    setItemsList(CareerSettings);
+                    console.log('response');
+                    console.log(response);
+                    const Settings = JSON.parse(response.wmcookies_settings_json);
+                    setSettingsList(Settings);
                     setIsApiLoaded(true);
                 });
             }
@@ -37120,7 +37120,7 @@ const WMCookiesSettingsPage = () => {
     const saveOptions = () => {
         setIsApiLoading(true);
         const model = new wp.api.models.Settings({
-            ['ess_career_settings_json']: JSON.stringify(itemsList),
+            ['wmcookies_settings_json']: JSON.stringify(settingsList),
         });
         model.save().then(() => {
             setIsApiLoading(false);
@@ -37132,22 +37132,10 @@ const WMCookiesSettingsPage = () => {
      * @param data Array data to be passed to itemsList
      * @return void
      */
-    const updateItemsList = (key_name, data) => {
-        const newList = Object.assign({}, itemsList);
+    const updateSetting = (key_name, data) => {
+        const newList = Object.assign({}, settingsList);
         newList[key_name] = data;
-        setItemsList(newList);
-    };
-    /**
-     * Handles global settings updates
-     * @param setting
-     * @param value
-     * @return void
-     */
-    const updateGlobalSettings = (setting, value) => {
-        const newGlobalSettings = Object.assign({}, itemsList);
-        if (newGlobalSettings.globalSettings)
-            newGlobalSettings.globalSettings[setting] = value;
-        setItemsList(newGlobalSettings);
+        setSettingsList(newList);
     };
     /**
      * Updates settings when some of the career post meta option is changed
@@ -37155,27 +37143,23 @@ const WMCookiesSettingsPage = () => {
      */
     const render = () => {
         if (!isAPILoaded) {
-            return (react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["default"], null,
-                react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["default"], null)));
+            return (react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["default"], null,
+                react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["default"], null)));
         }
         else {
             return (react__WEBPACK_IMPORTED_MODULE_1___default().createElement(react__WEBPACK_IMPORTED_MODULE_1__.Fragment, null,
-                react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", { className: "ess-career-main max-w-4xl mx-auto" },
-                    react__WEBPACK_IMPORTED_MODULE_1___default().createElement("h1", { className: 'text-center' }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('ESS Career Options')),
+                react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", { id: "wmwp-settings-main" },
+                    react__WEBPACK_IMPORTED_MODULE_1___default().createElement("h1", { className: 'text-center' }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Webmind Cookies Plugin Settings')),
                     react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", null,
-                        react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", { className: "border border-gray-400 bg-white rounded-md m-4 px-6" },
-                            react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], { title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Global settings'), initialOpen: true },
-                                react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["default"], { className: "pb-8" },
-                                    react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], { label: "Allow filter", help: 'Check to allow filter career posts feature on frontend', checked: (itemsList === null || itemsList === void 0 ? void 0 : itemsList.globalSettings.showFilter) && itemsList.globalSettings.showFilter, onChange: () => {
-                                            if (itemsList)
-                                                updateGlobalSettings('showFilter', !itemsList.globalSettings.showFilter);
-                                            console.log(itemsList);
+                        react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", { className: "wmwp-settings-group" },
+                            react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["default"], { title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Global settings'), initialOpen: true },
+                                react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], { className: "pb-8" },
+                                    react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["default"], { label: "Test toggle", help: 'test toggle', checked: settingsList ? settingsList.setting1 : false, onChange: () => {
+                                            updateSetting('setting1', settingsList && !settingsList.setting1);
+                                            console.log(settingsList);
                                         } })))),
-                        react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_options_row__WEBPACK_IMPORTED_MODULE_2__["default"], { title: 'Available locations', optionSlug: 'locations', listFn: updateItemsList, items: itemsList ? itemsList['locations'] : [{ slug: 'all', name: 'all' }], isApiLoading: isAPILoading }),
-                        react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_options_row__WEBPACK_IMPORTED_MODULE_2__["default"], { title: 'Available departments', optionSlug: 'departments', listFn: updateItemsList, items: itemsList ? itemsList['departments'] : [{ slug: 'all', name: 'all' }], isApiLoading: isAPILoading }),
-                        react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_options_row__WEBPACK_IMPORTED_MODULE_2__["default"], { title: 'Available types of contract', optionSlug: 'types', listFn: updateItemsList, items: itemsList ? itemsList['types'] : [{ slug: 'all', name: 'all' }], isApiLoading: isAPILoading }),
-                        react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__["default"], { className: 'my-12' },
-                            react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["default"], { className: ' block bg-itsblue text-white w-24 h-24 rounded-full m-auto shadow-md hover:bg-itsblue-dark transition-colors', disabled: isAPILoading, onClick: saveOptions },
+                        react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], { className: 'my-12' },
+                            react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_7__["default"], { className: 'wmwp-settings-submit', disabled: isAPILoading, onClick: saveOptions },
                                 "Save",
                                 react__WEBPACK_IMPORTED_MODULE_1___default().createElement("br", null),
                                 "Options"))))));
@@ -37184,96 +37168,6 @@ const WMCookiesSettingsPage = () => {
     return (render());
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (WMCookiesSettingsPage);
-
-
-/***/ }),
-
-/***/ "./src/components/options-row.tsx":
-/*!****************************************!*\
-  !*** ./src/components/options-row.tsx ***!
-  \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/panel/body.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/panel/row.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/base-control/index.js");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/components */ "./node_modules/@wordpress/components/build-module/button/index.js");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
-
-
-
-/**
- * Option Element. There are currently locations, departments and types options. Each one has this Element to manage the option.
- * @param title Name of the option
- * @param optionSlug options slug. Used in listFn function as key in parent objectff
- * @param items inhereted on birth from database
- * @param listFn refference to parent element function that registers and saves all options together
- * @param isAiLoading boolean
- * @returns JSX.Element
- */
-const OptionsRow = ({ title, optionSlug, items, listFn, isApiLoading }) => {
-    const [itemsList, setItemsList] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(items);
-    /**
-     * Create new option item in the meta field.
-     * @param slug meta item slug name
-     */
-    const addItem = (slug) => {
-        const items = [...itemsList];
-        items.push({ 'slug': 'newlocation', 'name': 'New location' });
-        listFn(slug, items);
-        setItemsList(items);
-    };
-    /**
-     * Updates options list when input is edited.
-     * @param i index of option item in the list of options items
-     * @param slug meta item slug name
-     * @param input target input that triggers the function to retrieve new data from
-     */
-    const updateItem = (i, slug, input) => {
-        const items = [...itemsList];
-        items[i][input.name] = input.value;
-        setItemsList(items);
-        listFn(slug, itemsList);
-    };
-    /**
-    * Deletes the item from the list of options in meta field.
-    * @param i index of option item in the list of options items
-    * @param slug meta item slug name
-    */
-    const deleteItem = (i, slug) => {
-        const items = [...itemsList];
-        items.splice(i, 1);
-        listFn(slug, items);
-        setItemsList(items);
-    };
-    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "border border-gray-400 bg-white rounded-md m-4 px-6" },
-        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__["default"], { title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)(title), initialOpen: false },
-            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["default"], null,
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'h-10' }),
-                itemsList.map((key, index) => {
-                    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'flex content-center justify-center ', key: `careerOptionItem-${optionSlug}-${index}` },
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: '' },
-                            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["default"], { id: "wms-options-privacy-api", className: "ess-career-text-field", help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('slug.', 'ess-career') },
-                                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", id: `ess-career-location-slug-${index}`, name: "slug", value: key.slug, placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Privacy Policy Page URL', 'ess-career'), disabled: isApiLoading, onChange: (e) => updateItem(index, optionSlug, e.target) }))),
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: 'mx-2' },
-                            react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["default"], { id: "wms-options-privacy-api", className: "ess-career-text-field", help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('name.', 'ess-career') },
-                                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", { type: "text", id: `ess-career-location-name-${index}`, name: "name", value: key.name, placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Privacy Policy Page URL', 'ess-career'), disabled: isApiLoading, onChange: (e) => updateItem(index, optionSlug, e.target) }))),
-                        react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], { className: `w-auto p-2 h-8 rounded-sm ${index == 0 ? 'bg-gray-200' : 'bg-red-400'}`, onClick: () => {
-                                if (index != 0)
-                                    deleteItem(index, optionSlug);
-                            } }, "Delete")));
-                }),
-                react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", { className: "ess-career-text-field-button-group my-4" },
-                    react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["default"], { className: 'block m-auto rounded-full text-xl bg-green-400 w-12 h-12', disabled: isApiLoading, onClick: () => addItem(optionSlug) }, "+"))))));
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (OptionsRow);
 
 
 /***/ }),
@@ -54697,9 +54591,9 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-/*!*************************!*\
-  !*** ./src/backend.tsx ***!
-  \*************************/
+/*!***********************!*\
+  !*** ./src/admin.tsx ***!
+  \***********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -54720,4 +54614,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=settings-page.js.map
+//# sourceMappingURL=admin.js.map
