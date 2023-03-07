@@ -6,6 +6,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const path = require( 'path' );
 
 const TerserJSPlugin = require( 'terser-webpack-plugin' );
+const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
 
 const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 
@@ -15,7 +16,8 @@ module.exports = {
 
   entry: {
     'frontend': './src/index.ts',
-    'admin': './src/admin.tsx'
+    'admin': './src/admin.tsx',
+    'consent-banner': './src/cookiesBanner.ts'
   },
 
   output: {
@@ -72,6 +74,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new DependencyExtractionWebpackPlugin(),
     new CleanWebpackPlugin(),
   ],
 };

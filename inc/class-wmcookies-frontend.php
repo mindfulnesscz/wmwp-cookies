@@ -7,8 +7,9 @@
 
 class WMCookies_Frontend
 {
-  public $version;
-  public $text_domain;
+  private string $version;
+
+  private string $text_domain;
 
   public function __construct($version, $text_domain)
   {
@@ -43,6 +44,8 @@ class WMCookies_Frontend
   {
     wp_enqueue_script('wmcookies-fe-script', plugins_url('assets/js/frontend.js', __DIR__), array(), $this->version, false);
 
+    wp_enqueue_script('wmcookies-fe-banner', plugins_url('assets/js/consent-banner.js', __DIR__), array(), $this->version, true);
+
     wp_enqueue_style('wmcookies-fe-styles', plugins_url('assets/css/frontend.css', __DIR__), array(), $this->version);
   }
 
@@ -56,8 +59,8 @@ class WMCookies_Frontend
         <p>We use the minimum cookies to make this website functional and to get anonymous information how visitors use it to improve user experience. We kindly ask You for Your permission to do it.</p>
       </div>
       <div>
-        <button class="md" id="wmwp-cookies-consent">consent</button>
-        <button class="outlined md" id="wmwp-cookies-deny">deny</button>
+        <button class="md button" id="wmwp-cookies-consent">consent</button>
+        <button class="outlined md button" id="wmwp-cookies-deny">deny</button>
       </div>
     </div>
 <?php

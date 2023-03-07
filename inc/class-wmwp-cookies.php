@@ -7,9 +7,9 @@
 
 class WMWP_Cookies
 {
-  public $text_domain;
+  private string $text_domain;
 
-  public $version;
+  private string $version;
 
   public function __construct($text_domain, $version)
   {
